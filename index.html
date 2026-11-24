@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentinel | Tecnología que cuida de ti</title>
+  <meta name="description" content="Sentinel es un sensor que se conecta a cualquier prenda y avisa al celular de tu familia si un adulto mayor sufre una caída.">
+  <meta name="theme-color" content="#f2f5fb">
+  <link rel="icon" href="img/logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>document.documentElement.classList.add('js');</script>
+  <!-- Visor 3D (Google model-viewer) -->
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ============ ICONOS (sprite SVG) ============ -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></symbol>
+      <symbol id="i-bt" viewBox="0 0 24 24"><polyline points="6.5 6.5 17.5 17.5 12 23 12 1 17.5 6.5 6.5 17.5"/></symbol>
+      <symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+      <symbol id="i-phone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></symbol>
+      <symbol id="i-battery" viewBox="0 0 24 24"><path d="M5 18H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.19M15 6h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3.19"/><line x1="23" y1="13" x2="23" y2="11"/><polyline points="11 6 7 12 13 12 9 18"/></symbol>
+      <symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+      <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></symbol>
+      <symbol id="i-activity" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+      <symbol id="i-feather" viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></symbol>
+      <symbol id="i-shirt" viewBox="0 0 24 24"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></symbol>
+      <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></symbol>
+      <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+      <symbol id="i-mail" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></symbol>
+      <symbol id="i-call" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+      <symbol id="i-up" viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
+      <symbol id="i-move" viewBox="0 0 24 24"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="15 19 12 22 9 19"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></symbol>
+      <symbol id="i-cube" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></symbol>
+      <symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- ============ PRELOADER Y BARRA DE PROGRESO ============ -->
+  <div class="preloader" aria-hidden="true">
+    <img src="img/logo.png" alt="">
+    <span class="preloader__bar"><i></i></span>
+  </div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <!-- ============ HEADER ============ -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="#inicio" class="brand" aria-label="Sentinel - Inicio">
+        <img src="img/logo.png" alt="Sentinel - Tecnología que cuida de ti">
+      </a>
+
+      <nav class="nav" id="nav" aria-label="Navegación principal">
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#caracteristicas">Características</a>
+        <a href="#modelo-3d">Modelo 3D</a>
+        <a href="#conectividad">Conectividad</a>
+        <a href="#especificaciones">Ficha técnica</a>
+        <a href="#faq">Preguntas</a>
+        <a href="#contacto" class="btn btn--sm">Quiero Sentinel</a>
+      </nav>
+
+      <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="inicio">
+      <div class="hero__mesh" aria-hidden="true">
+        <span class="blob blob--1"></span>
+        <span class="blob blob--2"></span>
+        <span class="blob blob--3"></span>
+        <div class="grid-lines"></div>
+      </div>
+
+      <div class="container hero__inner">
+        <div class="hero__text">
+          <span class="badge anim-in" style="--d:.1s"><i class="badge__dot"></i>Detección de caídas · Adultos mayores</span>
+          <h1 class="split-words">Tecnología que <em>cuida de ti</em> y de los tuyos</h1>
+          <p class="lead anim-in" style="--d:.7s">
+            Sentinel es un pequeño sensor que se coloca en cualquier prenda y avisa de inmediato
+            al celular de tu familia si un adulto mayor sufre una caída, para que puedan auxiliarlo a tiempo.
+          </p>
+          <div class="hero__cta anim-in" style="--d:.85s">
+            <a href="#contacto" class="btn btn--magnetic">Solicitar información
+              <svg class="ico"><use href="#i-arrow"/></svg></a>
+            <a href="#como-funciona" class="btn btn--ghost btn--magnetic">
+              <svg class="ico"><use href="#i-play"/></svg>Ver cómo funciona</a>
+          </div>
+          <ul class="hero__points anim-in" style="--d:1s">
+            <li><svg class="ico"><use href="#i-check"/></svg>Se conecta a cualquier prenda</li>
+            <li><svg class="ico"><use href="#i-check"/></svg>Alerta instantánea al celular</li>
+            <li><svg class="ico"><use href="#i-check"/></svg>WiFi + Bluetooth</li>
+          </ul>
+        </div>
+
+        <div class="hero__stage anim-in" style="--d:.4s" aria-label="Dispositivo Sentinel">
+          <div class="stage__rings" aria-hidden="true"><i></i><i></i><i></i></div>
+
+          <div class="stage__disc" data-depth="14">
+            <div class="stage__orbit" aria-hidden="true"></div>
+            <!-- COLOCA AQUÍ tu imagen principal: img/hero.png -->
+            <div class="media media--hero" data-hint="Coloca aquí: img/hero.png">
+              <img src="img/hero.png" alt="Dispositivo Sentinel" onerror="this.remove()">
+            </div>
+          </div>
+
+          <!-- Celular de demostración (animación decorativa) -->
+          <div class="phone" data-depth="30" aria-hidden="true">
+            <div class="phone__body">
+              <i class="phone__notch"></i>
+              <div class="phone__screen">
+                <div class="ps ps--ok">
+                  <span class="ps__badge ps__badge--ok"><svg class="ico"><use href="#i-check"/></svg></span>
+                  <strong>Todo en orden</strong>
+                  <small>Abuela Rosa · Sentinel activo</small>
+                </div>
+                <div class="ps ps--alert">
+                  <span class="ps__badge ps__badge--alert"><svg class="ico"><use href="#i-bell"/></svg></span>
+                  <strong>¡Caída detectada!</strong>
+                  <small>Abuela Rosa necesita ayuda</small>
+                  <span class="ps__btn">Llamar ahora</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chip chip--a" data-depth="22">
+            <span class="dot dot--green"></span>
+            <div><strong>Sentinel activo</strong><small>Monitoreando</small></div>
+          </div>
+          <div class="chip chip--b" data-depth="38">
+            <span class="chip__ico"><svg class="ico"><use href="#i-wifi"/></svg></span>
+            <div><strong>Alerta enviada</strong><small>Llegó al celular en segundos</small></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============ CIFRAS ============ -->
+    <section class="stats">
+      <div class="container">
+        <div class="stats__grid">
+          <div class="stat reveal"><strong><span data-count="24">24</span>/7</strong><span>Monitoreo continuo</span></div>
+          <div class="stat reveal"><strong>&lt;<span data-count="5">5</span> s</strong><span>Tiempo de alerta*</span></div>
+          <div class="stat reveal"><strong>WiFi + BT</strong><span>Doble conectividad</span></div>
+          <div class="stat reveal"><strong>Global</strong><span>Alcance desde cualquier lugar</span></div>
+        </div>
+        <p class="stats__note">*Valores referenciales. Ajústalos con los datos reales de tu prototipo.</p>
+      </div>
+    </section>
+
+    <!-- ============ FRANJA ============ -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <div class="marquee__group">
+          <span>Detección de caídas</span><span>Alerta instantánea</span><span>WiFi</span><span>Bluetooth</span>
+          <span>Cualquier prenda</span><span>Alcance global</span><span>Privacidad cifrada</span><span>Tecnología que cuida de ti</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ PROBLEMA ============ -->
+    <section class="section">
+      <div class="container split">
+        <div class="reveal" data-reveal="left">
+          <span class="eyebrow">El problema</span>
+          <h2>Una caída puede cambiarlo todo en minutos</h2>
+          <p>
+            Las caídas son una de las principales causas de lesiones en adultos mayores. Muchas veces ocurren
+            cuando están solos y pasan minutos u horas antes de que alguien lo note.
+          </p>
+          <p>
+            <strong>Sentinel</strong> cierra esa brecha: detecta la caída en el momento y avisa a quien puede ayudar,
+            sin que el adulto mayor tenga que presionar nada ni usar un celular.
+          </p>
+          <div class="pills">
+            <span><svg class="ico"><use href="#i-zap"/></svg>Sin botones</span>
+            <span><svg class="ico"><use href="#i-feather"/></svg>Sin pantallas</span>
+            <span><svg class="ico"><use href="#i-heart"/></svg>Sin preocupaciones</span>
+          </div>
+        </div>
+        <div class="reveal" data-reveal="right">
+          <div class="frame">
+            <div class="media media--wide" data-hint="Coloca aquí: img/problema.jpg">
+              <img src="img/problema.jpg" alt="Adulto mayor en casa" onerror="this.remove()">
+            </div>
+            <div class="frame__badge">
+              <span class="chip__ico"><svg class="ico"><use href="#i-activity"/></svg></span>
+              <div><strong>Detección automática</strong><small>Sin intervención de la persona</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CÓMO FUNCIONA ============ -->
+    <section class="section section--soft" id="como-funciona">
+      <div class="container">
+        <div class="section__head reveal">
+          <span class="eyebrow">Cómo funciona</span>
+          <h2>Simple de usar, rápido para avisar</h2>
+          <p>Tres pasos y tu familia estará siempre informada.</p>
+        </div>
+
+        <div class="steps" id="steps">
+          <div class="steps__line" aria-hidden="true"><span id="stepsFill"></span></div>
+
+          <article class="step reveal">
+            <span class="step__num">1</span>
+            <div class="step__icon"><svg class="ico"><use href="#i-shirt"/></svg></div>
+            <h3>Colócalo en la prenda</h3>
+            <p>Sujeta Sentinel a cualquier prenda: camisa, chaleco, cinturón o abrigo. Es ligero y discreto.</p>
+          </article>
+          <article class="step reveal">
+            <span class="step__num">2</span>
+            <div class="step__icon"><svg class="ico"><use href="#i-activity"/></svg></div>
+            <h3>Detecta la caída</h3>
+            <p>Sus sensores de movimiento identifican un golpe o caída brusca y la diferencian de la actividad diaria.</p>
+          </article>
+          <article class="step reveal">
+            <span class="step__num">3</span>
+            <div class="step__icon"><svg class="ico"><use href="#i-phone"/></svg></div>
+            <h3>Avisa al celular</h3>
+            <p>Envía una alerta inmediata al celular del familiar o cuidador para que pueda auxiliar sin demora.</p>
+            <div class="notif" aria-hidden="true">
+              <span class="chip__ico chip__ico--red"><svg class="ico"><use href="#i-bell"/></svg></span>
+              <div><strong>¡Caída detectada!</strong><small>Ahora mismo · Abuela Rosa</small></div>
+            </div>
+          </article>
+        </div>
+
+        <div class="sim reveal">
+          <button class="btn" id="simBtn" type="button"><svg class="ico"><use href="#i-play"/></svg><span>Simular una caída</span></button>
+          <p class="sim__status" id="simStatus" role="status" aria-live="polite">Pulsa el botón para ver cómo se envía la alerta.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CARACTERÍSTICAS ============ -->
+    <section class="section" id="caracteristicas">
+      <div class="container">
+        <div class="section__head reveal">
+          <span class="eyebrow">Características</span>
+          <h2>Pensado para cuidar sin molestar</h2>
+          <p>Todo lo necesario para la tranquilidad de la familia.</p>
+        </div>
+
+        <div class="bento">
+          <article class="tile tile--w2 reveal">
+            <svg class="ico tile__bg"><use href="#i-shirt"/></svg>
+            <span class="tile__icon"><svg class="ico"><use href="#i-shirt"/></svg></span>
+            <h3>Compatible con cualquier prenda</h3>
+            <p>Un solo dispositivo que se adapta a la ropa de todos los días, sin cambiar hábitos ni complicar la rutina.</p>
+          </article>
+
+          <article class="tile tile--accent reveal">
+            <span class="tile__icon"><svg class="ico"><use href="#i-zap"/></svg></span>
+            <h3>Alerta inmediata</h3>
+            <p>Notificación al instante en el celular del familiar, avisando que se necesita ayuda.</p>
+          </article>
+
+          <article class="tile reveal">
+            <span class="tile__icon"><svg class="ico"><use href="#i-wifi"/></svg></span>
+            <h3>WiFi y Bluetooth</h3>
+            <p>Bluetooth para cercanía y WiFi para enviar la alerta por internet.</p>
+            <div class="sig" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+          </article>
+
+          <article class="tile tile--w2 reveal">
+            <svg class="ico tile__bg"><use href="#i-battery"/></svg>
+            <span class="tile__icon"><svg class="ico"><use href="#i-battery"/></svg></span>
+            <h3>Batería de larga duración</h3>
+            <p>Diseñado para funcionar durante días con una sola carga y sin preocupaciones.</p>
+            <div class="bar" aria-hidden="true"><span></span></div>
+          </article>
+
+          <article class="tile tile--w2 reveal">
+            <svg class="ico tile__bg"><use href="#i-feather"/></svg>
+            <span class="tile__icon"><svg class="ico"><use href="#i-feather"/></svg></span>
+            <h3>Ligero y discreto</h3>
+            <p>Tamaño reducido y cómodo, para que el adulto mayor lo olvide mientras lo lleva puesto.</p>
+          </article>
+
+          <article class="tile reveal">
+            <span class="tile__icon"><svg class="ico"><use href="#i-lock"/></svg></span>
+            <h3>Privacidad y seguridad</h3>
+            <p>La información viaja cifrada y solo la reciben las personas que tú autorices.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MODELO 3D ============ -->
+    <section class="section section--dark" id="modelo-3d">
+      <div class="dark-bg" aria-hidden="true">
+        <span class="orb orb--1"></span><span class="orb orb--2"></span>
+        <div class="grid-lines grid-lines--light"></div>
+      </div>
+
+      <div class="container">
+        <div class="section__head section__head--light reveal">
+          <span class="eyebrow eyebrow--light">Modelo 3D interactivo</span>
+          <h2>Míralo desde todos los ángulos</h2>
+          <p>Arrastra para rotar y usa la rueda del mouse (o pellizca en el celular) para acercar.</p>
+        </div>
+
+        <div class="viewer-wrap reveal" data-reveal="zoom">
+          <div class="viewer__rings" aria-hidden="true"><i></i><i></i></div>
+          <div class="viewer" id="viewer">
+            <!-- COLOCA AQUÍ tu modelo 3D: models/sentinel.glb -->
+            <model-viewer
+              id="mv"
+              src="models/sentinel.glb"
+              alt="Modelo 3D del dispositivo Sentinel"
+              camera-controls
+              auto-rotate
+              auto-rotate-delay="800"
+              shadow-intensity="1.2"
+              shadow-softness="1"
+              exposure="1.05"
+              environment-image="neutral"
+              interaction-prompt="none"
+              loading="eager">
+              <div class="viewer__placeholder" slot="poster">
+                <svg class="ico"><use href="#i-cube"/></svg>
+              </div>
+            </model-viewer>
+
+            <div class="viewer__hint"><svg class="ico"><use href="#i-move"/></svg>Arrastra para rotar</div>
+            <div class="viewer__bar">
+              <button type="button" id="mvRotate" class="vbtn" aria-pressed="true">Giro automático</button>
+              <button type="button" id="mvReset" class="vbtn">Restablecer</button>
+              <button type="button" id="mvFull" class="vbtn" aria-label="Pantalla completa"><svg class="ico"><use href="#i-expand"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <ul class="viewer__chips reveal">
+          <li><svg class="ico"><use href="#i-activity"/></svg>Sensor de movimiento</li>
+          <li><svg class="ico"><use href="#i-wifi"/></svg>WiFi integrado</li>
+          <li><svg class="ico"><use href="#i-bt"/></svg>Bluetooth</li>
+          <li><svg class="ico"><use href="#i-battery"/></svg>Batería recargable</li>
+        </ul>
+        <p class="viewer__tip">Formato recomendado: <code>.glb</code> (puedes exportarlo desde Blender, Fusion 360, etc.).</p>
+      </div>
+    </section>
+
+    <!-- ============ CONECTIVIDAD ============ -->
+    <section class="section" id="conectividad">
+      <div class="container split split--reverse">
+        <div class="reveal" data-reveal="left">
+          <div class="net" aria-label="Diagrama: Sentinel envía la alerta por WiFi a internet y llega al celular">
+            <svg viewBox="0 0 560 440" role="img">
+              <defs>
+                <linearGradient id="gA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4c1d95"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient>
+              </defs>
+
+              <!-- caminos -->
+              <path class="net__path" d="M90 330 C 90 190 170 130 240 120"/>
+              <path class="net__path" d="M320 120 C 410 130 470 200 470 330"/>
+              <path class="net__path net__path--bt" d="M130 350 Q 280 430 430 350"/>
+
+              <!-- pulsos que viajan -->
+              <g fill="#7c3aed">
+                <circle r="6"><animateMotion dur="2.6s" repeatCount="indefinite" path="M90 330 C 90 190 170 130 240 120"/></circle>
+                <circle r="6"><animateMotion dur="2.6s" begin="1.3s" repeatCount="indefinite" path="M90 330 C 90 190 170 130 240 120"/></circle>
+                <circle r="6"><animateMotion dur="2.6s" begin=".9s" repeatCount="indefinite" path="M320 120 C 410 130 470 200 470 330"/></circle>
+                <circle r="6"><animateMotion dur="2.6s" begin="2.2s" repeatCount="indefinite" path="M320 120 C 410 130 470 200 470 330"/></circle>
+              </g>
+              <g fill="#c4b5fd">
+                <circle r="5"><animateMotion dur="3s" repeatCount="indefinite" path="M130 350 Q 280 430 430 350"/></circle>
+              </g>
+
+              <!-- nodo: Sentinel -->
+              <g transform="translate(90 330)">
+                <circle class="ripple" r="46" fill="#8b5cf6"/>
+                <circle class="ripple ripple--2" r="46" fill="#8b5cf6"/>
+                <circle r="42" fill="url(#gA)"/>
+                <g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <use href="#i-shirt" x="-17" y="-17" width="34" height="34"/>
+                </g>
+              </g>
+              <text class="net__label" x="90" y="402" text-anchor="middle">Sentinel</text>
+
+              <!-- nodo: Internet -->
+              <g transform="translate(280 118)">
+                <circle class="ripple" r="46" fill="#8b5cf6"/>
+                <circle r="44" fill="#fff" stroke="#ddd6fe" stroke-width="3"/>
+                <g fill="none" stroke="#6d28d9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <use href="#i-cloud" x="-20" y="-20" width="40" height="40"/>
+                </g>
+              </g>
+              <text class="net__label" x="280" y="190" text-anchor="middle">Internet · WiFi</text>
+
+              <!-- nodo: Celular -->
+              <g transform="translate(470 330)">
+                <circle class="ripple" r="46" fill="#8b5cf6"/>
+                <circle class="ripple ripple--2" r="46" fill="#8b5cf6"/>
+                <circle r="42" fill="url(#gA)"/>
+                <g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <use href="#i-phone" x="-17" y="-17" width="34" height="34"/>
+                </g>
+              </g>
+              <text class="net__label" x="470" y="402" text-anchor="middle">Tu celular</text>
+
+              <text class="net__tag" x="280" y="425" text-anchor="middle">Bluetooth · cuando estás cerca</text>
+              <text class="net__tag" x="64" y="200" text-anchor="end">Alerta</text>
+              <text class="net__tag" x="548" y="160" text-anchor="end">Cualquier lugar</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="reveal" data-reveal="right">
+          <span class="eyebrow">Conectividad</span>
+          <h2>Cerca o lejos, siempre conectado contigo</h2>
+          <p>Sentinel combina dos tecnologías para que la alerta llegue sin importar dónde estés:</p>
+          <ul class="checklist">
+            <li><span class="checklist__ico"><svg class="ico"><use href="#i-bt"/></svg></span>
+              <div><strong>Bluetooth</strong><span>Enlace directo con el celular cuando estás cerca.</span></div></li>
+            <li><span class="checklist__ico"><svg class="ico"><use href="#i-wifi"/></svg></span>
+              <div><strong>WiFi</strong><span>Envía la alerta a internet y llega a tu celular desde cualquier parte del mundo, a miles de kilómetros si hace falta.</span></div></li>
+            <li><span class="checklist__ico"><svg class="ico"><use href="#i-shield"/></svg></span>
+              <div><strong>Respaldo automático</strong><span>Si una conexión falla, usa la otra para que el aviso no se pierda.</span></div></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ GALERÍA ============ -->
+    <section class="section section--soft" id="galeria">
+      <div class="container">
+        <div class="section__head reveal">
+          <span class="eyebrow">Galería</span>
+          <h2>Conoce Sentinel de cerca</h2>
+          <p>Imágenes del dispositivo y de su uso diario.</p>
+        </div>
+
+        <div class="gallery">
+          <figure class="gallery__item reveal" data-hint="img/galeria-1.jpg"><img src="img/galeria-1.jpg" alt="Sentinel imagen 1" onerror="this.remove()"></figure>
+          <figure class="gallery__item reveal" data-hint="img/galeria-2.jpg"><img src="img/galeria-2.jpg" alt="Sentinel imagen 2" onerror="this.remove()"></figure>
+          <figure class="gallery__item reveal" data-hint="img/galeria-3.jpg"><img src="img/galeria-3.jpg" alt="Sentinel imagen 3" onerror="this.remove()"></figure>
+          <figure class="gallery__item reveal" data-hint="img/galeria-4.jpg"><img src="img/galeria-4.jpg" alt="Sentinel imagen 4" onerror="this.remove()"></figure>
+          <figure class="gallery__item reveal" data-hint="img/galeria-5.jpg"><img src="img/galeria-5.jpg" alt="Sentinel imagen 5" onerror="this.remove()"></figure>
+          <figure class="gallery__item reveal" data-hint="img/galeria-6.jpg"><img src="img/galeria-6.jpg" alt="Sentinel imagen 6" onerror="this.remove()"></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PARA QUIÉN ES ============ -->
+    <section class="section">
+      <div class="container">
+        <div class="section__head reveal">
+          <span class="eyebrow">Para quién es</span>
+          <h2>Tranquilidad para toda la familia</h2>
+        </div>
+        <div class="personas">
+          <article class="persona reveal">
+            <span class="persona__icon"><svg class="ico"><use href="#i-user"/></svg></span>
+            <h3>Adultos mayores</h3>
+            <p>Mayor independencia y seguridad en casa y fuera de ella.</p>
+          </article>
+          <article class="persona reveal">
+            <span class="persona__icon"><svg class="ico"><use href="#i-users"/></svg></span>
+            <h3>Familiares</h3>
+            <p>Saben al instante si algo ocurre, aunque vivan lejos.</p>
+          </article>
+          <article class="persona reveal">
+            <span class="persona__icon"><svg class="ico"><use href="#i-heart"/></svg></span>
+            <h3>Cuidadores</h3>
+            <p>Atención oportuna para actuar rápido cuando más se necesita.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ESPECIFICACIONES ============ -->
+    <section class="section section--soft" id="especificaciones">
+      <div class="container split split--top">
+        <div class="reveal" data-reveal="left">
+          <span class="eyebrow">Especificaciones</span>
+          <h2>Ficha técnica</h2>
+          <p>Todo lo que necesitas saber del dispositivo de un vistazo. <em class="note">Reemplaza estos valores por los datos reales de tu prototipo.</em></p>
+          <a href="#contacto" class="btn">Pedir más detalles<svg class="ico"><use href="#i-arrow"/></svg></a>
+        </div>
+        <div class="reveal" data-reveal="right">
+          <table class="specs">
+            <tbody>
+              <tr><th><svg class="ico"><use href="#i-activity"/></svg>Sensor</th><td>Acelerómetro / giroscopio (IMU)</td></tr>
+              <tr><th><svg class="ico"><use href="#i-wifi"/></svg>Conectividad</th><td>WiFi 2.4 GHz · Bluetooth 5.0</td></tr>
+              <tr><th><svg class="ico"><use href="#i-bell"/></svg>Notificaciones</th><td>App móvil (Android / iOS)</td></tr>
+              <tr><th><svg class="ico"><use href="#i-battery"/></svg>Batería</th><td>Recargable (USB-C)</td></tr>
+              <tr><th><svg class="ico"><use href="#i-zap"/></svg>Autonomía</th><td>Por definir</td></tr>
+              <tr><th><svg class="ico"><use href="#i-cube"/></svg>Dimensiones</th><td>Por definir</td></tr>
+              <tr><th><svg class="ico"><use href="#i-feather"/></svg>Peso</th><td>Por definir</td></tr>
+              <tr><th><svg class="ico"><use href="#i-shirt"/></svg>Instalación</th><td>Clip / adhesivo textil</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="section" id="faq">
+      <div class="container container--narrow">
+        <div class="section__head reveal">
+          <span class="eyebrow">Preguntas frecuentes</span>
+          <h2>Resolvemos tus dudas</h2>
+        </div>
+
+        <div class="faq">
+          <details class="reveal" open>
+            <summary>¿En qué prendas se puede usar Sentinel?</summary>
+            <p>En cualquier prenda: camisas, chalecos, chaquetas, cinturones o pantalones. Se sujeta de forma sencilla y segura.</p>
+          </details>
+          <details class="reveal">
+            <summary>¿Cómo sé que alguien se cayó?</summary>
+            <p>Recibes una notificación inmediata en tu celular indicando que se detectó una caída y que se necesita ayuda.</p>
+          </details>
+          <details class="reveal">
+            <summary>¿Funciona si estoy lejos?</summary>
+            <p>Sí. Sentinel se conecta por WiFi a internet, por lo que la alerta puede llegar a tu celular desde cualquier lugar donde tengas conexión.</p>
+          </details>
+          <details class="reveal">
+            <summary>¿Necesita que el adulto mayor use un celular?</summary>
+            <p>No. El dispositivo trabaja solo; no hay botones que presionar ni pantallas que manejar.</p>
+          </details>
+          <details class="reveal">
+            <summary>¿Cada cuánto se carga?</summary>
+            <p>Su batería está pensada para durar varios días. Indica aquí la autonomía real de tu prototipo.</p>
+          </details>
+          <details class="reveal">
+            <summary>¿Mis datos están seguros?</summary>
+            <p>La información se envía cifrada y solo la reciben las personas autorizadas por la familia.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACTO ============ -->
+    <section class="section cta" id="contacto">
+      <div class="cta__waves" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="container cta__inner">
+        <div class="cta__text reveal" data-reveal="left">
+          <span class="eyebrow eyebrow--light">Contacto</span>
+          <h2>Cuida a quienes más quieres con Sentinel</h2>
+          <p>Déjanos tus datos y te contactaremos con toda la información del producto.</p>
+          <ul class="cta__list">
+            <li><span><svg class="ico"><use href="#i-mail"/></svg></span>contacto@sentinel.com</li>
+            <li><span><svg class="ico"><use href="#i-call"/></svg></span>+51 999 999 999</li>
+            <li><span><svg class="ico"><use href="#i-pin"/></svg></span>Lima, Perú</li>
+          </ul>
+        </div>
+
+        <form class="form reveal" data-reveal="right" id="contactForm" novalidate>
+          <div class="field">
+            <input type="text" id="f-nombre" name="nombre" placeholder=" " autocomplete="name" required>
+            <label for="f-nombre">Nombre completo</label>
+          </div>
+          <div class="field">
+            <input type="email" id="f-correo" name="correo" placeholder=" " autocomplete="email" required>
+            <label for="f-correo">Correo electrónico</label>
+          </div>
+          <div class="field">
+            <input type="tel" id="f-tel" name="telefono" placeholder=" " autocomplete="tel">
+            <label for="f-tel">Teléfono</label>
+          </div>
+          <div class="field">
+            <textarea id="f-msg" name="mensaje" rows="4" placeholder=" "></textarea>
+            <label for="f-msg">Cuéntanos qué necesitas</label>
+          </div>
+          <button type="submit" class="btn btn--block">Enviar mensaje<svg class="ico"><use href="#i-arrow"/></svg></button>
+          <p class="form__msg" id="formMsg" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <img src="img/logo.png" alt="Sentinel">
+        <p>Tecnología que cuida de ti.</p>
+      </div>
+      <nav class="footer__nav" aria-label="Enlaces del pie de página">
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#caracteristicas">Características</a>
+        <a href="#modelo-3d">Modelo 3D</a>
+        <a href="#faq">Preguntas</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+    </div>
+    <div class="container footer__bottom">
+      <small>© <span id="year"></span> Sentinel. Todos los derechos reservados.</small>
+    </div>
+  </footer>
+
+  <!-- Visor de imágenes de la galería -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Imagen ampliada" hidden>
+    <button type="button" class="lightbox__close" id="lbClose" aria-label="Cerrar"><svg class="ico"><use href="#i-plus"/></svg></button>
+    <img src="" alt="">
+  </div>
+
+  <a href="#inicio" class="to-top" id="toTop" aria-label="Volver arriba"><svg class="ico"><use href="#i-up"/></svg></a>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

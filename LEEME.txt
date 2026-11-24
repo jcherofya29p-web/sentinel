@@ -1,0 +1,14 @@
+SENTINEL - Pagina web v2
+========================
+Abre index.html en tu navegador (o sube la carpeta completa a Netlify).
+
+COLOCA TUS ARCHIVOS (mismos nombres que la version anterior):
+  img/logo.png          -> logotipo (ya incluido)
+  img/hero.png          -> imagen principal del producto (PNG sin fondo se ve mejor, ~1200x1200)
+  img/problema.jpg      -> foto de la seccion "El problema" (4:3)
+  img/galeria-1.jpg ... galeria-6.jpg -> galeria (galeria-1 es la mas grande)
+  models/sentinel.glb   -> modelo 3D en formato .glb
+
+Mientras falte una imagen se ve un recuadro con la ruta donde debe ir.
+La seccion de conectividad ahora es un diagrama animado (ya no usa imagen).
+El visor 3D y las fuentes cargan desde internet.
