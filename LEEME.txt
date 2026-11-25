@@ -1,10 +1,11 @@
 SENTINEL - Pagina web v2
 ========================
-Abre index.html en tu navegador (o sube la carpeta completa a Netlify).
+Desde esta carpeta, ejecuta `python -m http.server 8000` y abre
+`http://localhost:8000` en tu navegador (o sube la carpeta completa a Netlify).
+No abras index.html directamente con file://: el navegador puede bloquear la carga del modelo 3D.
 
 COLOCA TUS ARCHIVOS (mismos nombres que la version anterior):
   img/logo.png          -> logotipo (ya incluido)
-  img/hero.png          -> imagen principal del producto (PNG sin fondo se ve mejor, ~1200x1200)
   img/problema.jpg      -> foto de la seccion "El problema" (4:3)
   img/galeria-1.jpg ... galeria-6.jpg -> galeria (galeria-1 es la mas grande)
   models/sentinel.glb   -> modelo 3D en formato .glb

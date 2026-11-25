@@ -118,9 +118,20 @@
 
           <div class="stage__disc" data-depth="14">
             <div class="stage__orbit" aria-hidden="true"></div>
-            <!-- COLOCA AQUÍ tu imagen principal: img/hero.png -->
-            <div class="media media--hero" data-hint="Coloca aquí: img/hero.png">
-              <img src="img/hero.png" alt="Dispositivo Sentinel" onerror="this.remove()">
+            <div class="media media--hero">
+              <model-viewer
+                src="models/sentinel.glb"
+                alt="Modelo 3D del dispositivo Sentinel"
+                camera-controls
+                auto-rotate
+                auto-rotate-delay="800"
+                shadow-intensity="1.2"
+                shadow-softness="1"
+                exposure="1.05"
+                environment-image="neutral"
+                interaction-prompt="none"
+                loading="eager">
+              </model-viewer>
             </div>
           </div>
 
@@ -200,7 +211,7 @@
         <div class="reveal" data-reveal="right">
           <div class="frame">
             <div class="media media--wide" data-hint="img/problema.jpg">
-              <img src="img/problema.jpg" alt="Adulto mayor en casa" onerror="this.remove()">
+              <img src="img/problema.jpeg" alt="Adulto mayor en casa" onerror="this.remove()">
             </div>
             <div class="frame__badge">
               <span class="chip__ico"><svg class="ico"><use href="#i-activity"/></svg></span>
@@ -338,7 +349,7 @@
               exposure="1.05"
               environment-image="neutral"
               interaction-prompt="none"
-              loading="eager">
+              loading="lazy">
               <div class="viewer__placeholder" slot="poster">
                 <svg class="ico"><use href="#i-cube"/></svg>
               </div>
@@ -453,12 +464,12 @@
         </div>
 
         <div class="gallery">
-          <figure class="gallery__item reveal" data-hint="img/galeria-1.jpg"><img src="img/galeria-1.jpg" alt="Sentinel imagen 1" onerror="this.remove()"></figure>
-          <figure class="gallery__item reveal" data-hint="img/galeria-2.jpg"><img src="img/galeria-2.jpg" alt="Sentinel imagen 2" onerror="this.remove()"></figure>
-          <figure class="gallery__item reveal" data-hint="img/galeria-3.jpg"><img src="img/galeria-3.jpg" alt="Sentinel imagen 3" onerror="this.remove()"></figure>
-          <figure class="gallery__item reveal" data-hint="img/galeria-4.jpg"><img src="img/galeria-4.jpg" alt="Sentinel imagen 4" onerror="this.remove()"></figure>
-          <figure class="gallery__item reveal" data-hint="img/galeria-5.jpg"><img src="img/galeria-5.jpg" alt="Sentinel imagen 5" onerror="this.remove()"></figure>
-          <figure class="gallery__item reveal" data-hint="img/galeria-6.jpg"><img src="img/galeria-6.jpg" alt="Sentinel imagen 6" onerror="this.remove()"></figure>
+          <figure class="gallery__item reveal" data-hint="img/galeria-1.png"><img src="img/galeria-1.png" alt="Sentinel imagen 1" onerror="this.remove()"></figure>
+          <figure class="gallery__item reveal" data-hint="img/galeria-2.jpeg"><img src="img/galeria-2.jpeg" alt="Sentinel imagen 2" onerror="this.remove()"></figure>
+          <figure class="gallery__item reveal" data-hint="img/galeria-3.jpeg"><img src="img/galeria-3.jpeg" alt="Sentinel imagen 3" onerror="this.remove()"></figure>
+          <figure class="gallery__item reveal" data-hint="img/galeria-4.jpeg"><img src="img/galeria-4.jpeg" alt="Sentinel imagen 4" onerror="this.remove()"></figure>
+          <figure class="gallery__item reveal" data-hint="img/galeria-5.jpeg"><img src="img/galeria-5.jpeg" alt="Sentinel imagen 5" onerror="this.remove()"></figure>
+          <figure class="gallery__item reveal" data-hint="img/galeria-6.jpeg"><img src="img/galeria-6.jpeg" alt="Sentinel imagen 6" onerror="this.remove()"></figure>
         </div>
       </div>
     </section>
